@@ -1,0 +1,41 @@
+{% extends "index.html" %}
+
+{% block title %}Admin Panel - Professional Starfield Website{% endblock %}
+
+{% block content %}
+<section id="admin">
+    <h1>Admin Panel</h1>
+    <form action="{{ url_for('admin') }}" method="POST" enctype="multipart/form-data">
+        <label for="section">Section:</label>
+        <select name="section" id="section">
+            <option value="shop">Shop</option>
+            <option value="tools">Tools</option>
+            <option value="combo">Combo</option>
+        </select>
+        <label for="title">Title:</label>
+        <input type="text" name="title" id="title" required>
+        <label for="image">Image:</label>
+        <input type="file" name="image" id="image" required>
+        <label for="description">Description:</label>
+        <textarea name="description" id="description" required></textarea>
+        <div id="shop-fields">
+            <label for="price">Price:</label>
+            <input type="text" name="price" id="price">
+            <label for="link">Link:</label>
+            <input type="text" name="link" id="link">
+        </div>
+        <div id="tools-combo-fields">
+            <label for="file">File:</label>
+            <input type="file" name="file" id="file">
+        </div>
+        <button type="submit" class="cta-button">Post</button>
+    </form>
+</section>
+<script>
+    document.getElementById('section').addEventListener('change', function() {
+        const section = this.value;
+        document.getElementById('shop-fields').style.display = section === 'shop' ? 'block' : 'none';
+        document.getElementById('tools-combo-fields').style.display = section === 'shop' ? 'none' : 'block';
+    });
+</script>
+{% endblock %}

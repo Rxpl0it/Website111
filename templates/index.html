@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Professional Starfield Website{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/shared_css.css') }}">
+</head>
+<body>
+    <canvas id="starfield"></canvas>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('shop') }}">Shop</a></li>
+                <li><a href="{{ url_for('tools') }}">Tools</a></li>
+                <li><a href="{{ url_for('combo') }}">Combo</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+    <main>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div class="flashes">
+                    {% for message in messages %}
+                        <div class="flash">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        
+        {% block content %}
+        <section id="home">
+            <h1>Welcome to Our Universe</h1>
+            <p>Explore the infinite possibilities with our cutting-edge solutions</p>
+            <a href="{{ url_for('shop') }}" class="cta-button">Get Started</a>
+        </section>
+        {% endblock %}
+    </main>
+    <footer>
+        <p>&copy; 2023 Professional Starfield Website. All rights reserved.</p>
+    </footer>
+    <audio id="background-music">
+        <source src="{{ url_for('static', filename='music/your_music_file.mp3') }}" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    <script src="{{ url_for('static', filename='js/starfield.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var music = document.getElementById('background-music');
+            var playButton = document.createElement('button');
+            playButton.innerHTML = 'Pause Music';
+            playButton.style.position = 'fixed';
+            playButton.style.bottom = '20px';
+            playButton.style.right = '20px';
+            playButton.style.zIndex = '1000';
+            playButton.style.padding = '10px 20px';
+            playButton.style.backgroundColor = '#00aaff';
+            playButton.style.color = '#ffffff';
+            playButton.style.border = 'none';
+            playButton.style.borderRadius = '5px';
+            playButton.style.cursor = 'pointer';
+            document.body.appendChild(playButton);
+
+            // Function to play music
+            function playMusic() {
+                music.play().then(() => {
+                    console.log('Music started playing');
+                }).catch((error) => {
+                    console.error('Failed to play music:', error);
+                });
+            }
+
+            // Try to play music immediately
+            playMusic();
+
+            // If music fails to play, wait for user interaction
+            document.body.addEventListener('click', function() {
+                if (music.paused) {
+                    playMusic();
+                }
+            }, { once: true });
+
+            // Update button state based on music play state
+            function updateButtonState() {
+                playButton.innerHTML = music.paused ? 'Play Music' : 'Pause Music';
+            }
+
+            // Toggle music play/pause when button is clicked
+            playButton.addEventListener('click', function() {
+                if (music.paused) {
+                    playMusic();
+                } else {
+                    music.pause();
+                }
+                updateButtonState();
+            });
+
+            // Update button state when music plays or pauses
+            music.addEventListener('play', updateButtonState);
+            music.addEventListener('pause', updateButtonState);
+
+            // Ensure music loops
+            music.loop = true;
+        });
+    </script>
+</body>
+</html>

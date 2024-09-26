@@ -1,0 +1,33 @@
+{% extends 'admin/master.html' %}
+{% block body %}
+<h1>Welcome to the Admin Panel</h1>
+<div class="row">
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Quick Stats</h3>
+            </div>
+            <div class="panel-body">
+                <p>Total Users: {{ User.query.count() }}</p>
+                <p>Total Shop Items: {{ ShopItem.query.count() }}</p>
+                <p>Total Tools: {{ ToolItem.query.count() }}</p>
+                <p>Total Combos: {{ ComboItem.query.count() }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Admin Actions</h3>
+            </div>
+            <div class="panel-body">
+                <a href="{{ url_for('user.index_view') }}" class="btn btn-primary">Manage Users</a>
+                <a href="{{ url_for('shopitem.index_view') }}" class="btn btn-primary">Manage Shop Items</a>
+                <a href="{{ url_for('toolitem.index_view') }}" class="btn btn-primary">Manage Tools</a>
+                <a href="{{ url_for('comboitem.index_view') }}" class="btn btn-primary">Manage Combos</a>
+                <a href="{{ url_for('online_users') }}" class="btn btn-primary">View Online Users</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
